@@ -1,0 +1,48 @@
+STEP 1:First we install system-wide support for Python virtual environments and other dependencies. Actual Python packages are installed later.
+sudo apt-get install git python3-virtualenv libssl-dev libffi-dev build-essential libpython3-dev python3-minimal authbind virtualenv Python3.11.0 venv.
+
+STEP 2: It’s strongly recommended to run with a dedicated non-root user id:
+$ sudo adduser --disabled-password cowrie
+Adding user 'cowrie' ...
+Adding new group 'cowrie' (1002) ...
+Adding new user 'cowrie' (1002) with group 'cowrie' ...
+Changing the user information for cowrie
+Enter the new value, or press ENTER for the default
+Full Name []:
+Room Number []:
+Work Phone []:
+Home Phone []:
+Other []:
+Is the information correct? [Y/n]
+$ sudo su – cowrie
+
+STEP 3: Cloning Repository From The Webpage:
+Cloning into 'cowrie'...
+remote: Counting objects: 2965, done.
+remote: Compressing objects: 100% (1025/1025), done.
+remote: Total 2965 (delta 1908), reused 2962 (delta 1905), pack-reused 0
+Receiving objects: 100% (2965/2965), 3.41 MiB | 2.57 MiB/s, done.
+Resolving deltas: 100% (1908/1908), done.
+Checking connectivity... done.
+$ cd cowrie
+
+STEP 4: Next you need to create your virtual environment:
+$ pwd
+/home/cowrie/cowrie
+$ python -m venv cowrie-env
+New python executable in ./cowrie/cowrie-env/bin/python
+Installing setuptools, pip, wheel...done.
+
+STEP 5: Activate the virtual environment and install packages:
+$ source cowrie-env/bin/activate
+(cowrie-env) $ python -m pip install --upgrade pip
+(cowrie-env) $ python -m pip install --upgrade -r requirements.txt
+
+STEP 6: The configuration for Cowrie is stored in cowrie.cfg.dist and cowrie.cfg (Located in cowrie/etc). Both files are read on startup, where entries from cowrie.cfg take precedence. The .dist file can be overwritten by upgrades, cowrie.cfg will not be touched. To run with a standard configuration, there is no need to change anything. To enable telnet, for example, create cowrie.cfg and input only the following:
+[telnet]
+enabled = true
+
+STEP 7: Start Cowrie with the cowrie command. You can add the cowrie/bin directory to your path if desired. An existing virtual environment is preserved if activated, otherwise Cowrie will attempt to load the environment called “cowrie-env”:
+$ bin/cowrie start
+Activating virtualenv "cowrie-env"
+Starting cowrie with extra arguments [] ...
